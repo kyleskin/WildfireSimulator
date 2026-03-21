@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WildfireSimulator", "WildfireSimulator\WildfireSimulator.csproj", "{B59E8A2C-BDEC-48A1-99F1-0AECC9B2C8AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B59E8A2C-BDEC-48A1-99F1-0AECC9B2C8AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B59E8A2C-BDEC-48A1-99F1-0AECC9B2C8AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B59E8A2C-BDEC-48A1-99F1-0AECC9B2C8AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B59E8A2C-BDEC-48A1-99F1-0AECC9B2C8AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
