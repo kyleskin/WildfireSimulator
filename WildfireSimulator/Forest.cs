@@ -6,6 +6,7 @@ public class Forest
     private readonly int _height;
     private const int InitialTreeDensity = 90;
     private const int LightningStrikeRadius = 2;
+    private const int ChanceOfNewTree = 10;
 
     public Dictionary<(int X, int Y), IForestSquare> ForestSquares { get; }
     
@@ -24,10 +25,14 @@ public class Forest
         SpreadFire();
     }
 
-    public void NextYear()
+    public void NextYear(bool lastYear = false)
     {
         ClearBurntTrees();
-        LightningStrike();
+        GrowNewTrees();
+        if (!lastYear)
+        {
+            LightningStrike();
+        }
     }
     
     public void ClearBurntTrees()
@@ -53,6 +58,17 @@ public class Forest
                         : new ForestFloor((x, y))
                 );
             }
+        }
+    }
+
+    private void GrowNewTrees()
+    {
+        foreach (var square in ForestSquares
+                     .Where(square => 
+                         square.Value.State == ForestSquareState.Empty
+                        && Random.Shared.Next(100) < ChanceOfNewTree))
+        {
+            ForestSquares[(square.Key.X, square.Key.Y)] = new Tree((square.Key.X, square.Key.Y));
         }
     }
 
@@ -99,9 +115,9 @@ public class Forest
                 .Select(s => s.Value));
         }
 
-        foreach (var tree in neighbors)
+        foreach (var forestSquare in neighbors)
         {
-            tree.CatchFire();
+            forestSquare.CatchFire();
         }
     }
 }

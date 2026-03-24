@@ -7,6 +7,16 @@ const int height = 50;
 var simulation = new Simulation(width, height);
 var grid = new Table().MinimalistBorder().HideHeaders().HideFooters().HideRowSeparators();
 
+// foreach (var _ in Enumerable.Range(0, 5))
+// {
+//     foreach (var __ in Enumerable.Range(0, 30))
+//     {
+//         simulation.Forest.NextDay();
+//     }
+//     simulation.Forest.NextYear();
+// }
+// simulation.Forest.NextYear(lastYear: true);
+
 
 foreach (var _ in Enumerable.Range(0, width))
 {
@@ -45,13 +55,25 @@ AnsiConsole.Live(forestPanel)
                         grid.AddEmptyRow();
                     }
                 }
-                Thread.Sleep(200);
+                
                 ctx.UpdateTarget(forestPanel);
             }     
             simulation.Forest.NextYear();
         }
         
         simulation.Forest.ClearBurntTrees();
-        Thread.Sleep(200);
+        
+        grid.Rows.Clear();
+           
+        foreach (var y in Enumerable.Range(0, height))
+        {
+            grid.AddRow(simulation.Forest.ForestSquares.Where(s => s.Key.Y == y).Select(s => s.Value));
+
+            if (y < height - 1)
+            {
+                grid.AddEmptyRow();
+            }
+        }
+        
         ctx.UpdateTarget(forestPanel);
     });

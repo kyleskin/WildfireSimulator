@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Spectre.Console.Rendering;
 
 namespace WildfireSimulator;
@@ -5,6 +6,7 @@ namespace WildfireSimulator;
 public sealed class Tree : IForestSquare
 {
     private int _age;
+    private int _timeAsState;
     
     
     public (int x, int y) Position { get; init; }
@@ -21,23 +23,23 @@ public sealed class Tree : IForestSquare
     public void AgeYear()
     {
         _age++;
-        
+        _timeAsState++;
     }
 
     public void CatchFire()
     {
         var chanceOfCatchingFire = Random.Shared.Next(100);
-        
-        State = State switch
+
+        switch (State)
         {
-            ForestSquareState.Sapling => chanceOfCatchingFire < 40 ? ForestSquareState.OnFire : ForestSquareState.Sapling,
-            ForestSquareState.Juvenile => chanceOfCatchingFire < 20 ? ForestSquareState.OnFire : ForestSquareState.Juvenile,
-            ForestSquareState.Mature => chanceOfCatchingFire < 10 ? ForestSquareState.OnFire : ForestSquareState.Mature,
-            ForestSquareState.Diseased => chanceOfCatchingFire < 30 ? ForestSquareState.OnFire : ForestSquareState.Diseased,
-            ForestSquareState.Rotten => ForestSquareState.OnFire,
-            ForestSquareState.OnFire => ForestSquareState.OnFire,
-            _ => throw new ArgumentOutOfRangeException(nameof(State), $"Invalid tree state: {State}")
-        };
+            case ForestSquareState.Sapling when chanceOfCatchingFire < 40:
+            case ForestSquareState.Juvenile when chanceOfCatchingFire < 20:
+            case ForestSquareState.Mature when chanceOfCatchingFire < 10:
+            case ForestSquareState.Diseased when chanceOfCatchingFire < 30:
+            case ForestSquareState.Rotten:
+                UpdateState(ForestSquareState.OnFire);
+                break;
+        }
     }
 
     public Measurement Measure(RenderOptions options, int maxWidth)
@@ -54,13 +56,34 @@ public sealed class Tree : IForestSquare
     {
         _age = Random.Shared.Next(100);
 
-        State = _age switch
+        switch (_age)
         {
-            <= 10 => ForestSquareState.Sapling,
-            <= 30 => ForestSquareState.Juvenile,
-            <= 80 => ForestSquareState.Mature,
-            <= 95 => ForestSquareState.Diseased,
-            _ => ForestSquareState.Rotten,
-        };
+            case <= 10:
+                UpdateState(ForestSquareState.Sapling);
+                break;
+            case <= 30:
+                UpdateState(ForestSquareState.Juvenile);
+                break;
+            case <= 80:
+                UpdateState(ForestSquareState.Mature);
+                break;
+            case <= 90:
+                UpdateState(ForestSquareState.Diseased);
+                break;
+            default:
+                UpdateState(ForestSquareState.Rotten);
+                break;
+        }
+    }
+
+    private void UpdateState(ForestSquareState state)
+    {
+        State = state;
+        _timeAsState = 0;
+    }
+    
+    public override string ToString()
+    {
+        return $"Tree - x:{Position.x} y:{Position.y} - {State}";
     }
 }

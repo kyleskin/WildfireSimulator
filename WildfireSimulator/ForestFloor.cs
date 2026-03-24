@@ -14,12 +14,10 @@ public sealed class ForestFloor : IForestSquare
 
     public void AgeYear()
     {
-        throw new NotImplementedException();
     }
 
     public void CatchFire()
     {
-        
     }
 
     public Measurement Measure(RenderOptions options, int maxWidth)
@@ -30,5 +28,10 @@ public sealed class ForestFloor : IForestSquare
     public IEnumerable<Segment> Render(RenderOptions options, int maxWidth)
     {
         return ForestSquareRenderer.Render(State, options);
+    }
+    
+    public override string ToString()
+    {
+        return $"Forest Floor - x:{Position.x} y:{Position.y} - {State}";
     }
 }
